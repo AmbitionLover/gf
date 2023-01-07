@@ -145,7 +145,7 @@ func generateDaoInternal(in generateDaoInternalInput) {
 		getTemplateFromPathOrDefault(in.TplDaoInternalPath, consts.TemplateGenDaoInternalContent),
 		g.MapStrStr{
 			tplVarImportPrefix:            in.ImportPrefix,
-			tplVarTableName:               in.TableName,
+			tplVarTableName:               gstr.ToUpper(in.TableName),
 			tplVarGroupName:               in.Group,
 			tplVarTableNameCamelCase:      in.TableNameCamelCase,
 			tplVarTableNameCamelLowerCase: in.TableNameCamelLowerCase,

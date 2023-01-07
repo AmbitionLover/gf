@@ -96,6 +96,8 @@ generated json tag case for model struct, cases are as follows:
 	tplVarGroupName               = `{TplGroupName}`
 	tplVarDatetimeStr             = `{TplDatetimeStr}`
 	tplVarCreatedAtDatetimeStr    = `{TplCreatedAtDatetimeStr}`
+	TplDynamicGroupStr            = `{TplDynamicGroup}`
+	TplDynamicSchemaStr           = `{TplDynamicSchema}`
 )
 
 var (
@@ -338,6 +340,8 @@ func replaceDefaultVar(in CGenDaoInternalInput, origin string) string {
 	return gstr.ReplaceByMap(origin, g.MapStrStr{
 		tplVarDatetimeStr:          tplDatetimeStr,
 		tplVarCreatedAtDatetimeStr: tplCreatedAtDatetimeStr,
+		TplDynamicGroupStr:         "dynamic-group",
+		TplDynamicSchemaStr:        "dynamic-schema",
 	})
 }
 
