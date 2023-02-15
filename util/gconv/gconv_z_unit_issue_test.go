@@ -8,6 +8,7 @@ package gconv_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/gogf/gf/v2/container/gtype"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -221,5 +222,73 @@ func Test_Issue2381(t *testing.T) {
 		t.Assert(a1.Title, a2.Title)
 		t.Assert(a1.CreatedAt, a2.CreatedAt)
 		t.Assert(a1.Flag.String(), a2.Flag.String())
+	})
+}
+
+// https://github.com/gogf/gf/issues/2391
+func Test_Issue2391(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		type Inherit struct {
+			Ids   []int
+			Ids2  []int64
+			Flag  *gjson.Json
+			Title string
+		}
+
+		type Test1 struct {
+			Inherit
+		}
+		type Test2 struct {
+			Inherit
+		}
+
+		var (
+			a1 Test1
+			a2 Test2
+		)
+
+		a1 = Test1{
+			Inherit{
+				Ids:   []int{1, 2, 3},
+				Ids2:  []int64{4, 5, 6},
+				Flag:  gjson.New("[\"1\", \"2\"]"),
+				Title: "测试",
+			},
+		}
+
+		err := gconv.Scan(a1, &a2)
+		t.AssertNil(err)
+		t.Assert(a1.Ids, a2.Ids)
+		t.Assert(a1.Ids2, a2.Ids2)
+		t.Assert(a1.Title, a2.Title)
+		t.Assert(a1.Flag.String(), a2.Flag.String())
+	})
+}
+
+// https://github.com/gogf/gf/issues/2395
+func Test_Issue2395(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		type Test struct {
+			Num int
+		}
+		var ()
+		obj := Test{Num: 0}
+		t.Assert(gconv.Interfaces(obj), []interface{}{obj})
+	})
+}
+
+// https://github.com/gogf/gf/issues/2371
+func Test_Issue2371(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		var (
+			s = struct {
+				Time time.Time `json:"time"`
+			}{}
+			jsonMap = map[string]interface{}{"time": "2022-12-15 16:11:34"}
+		)
+
+		err := gconv.Struct(jsonMap, &s)
+		t.AssertNil(err)
+		t.Assert(s.Time.UTC(), `2022-12-15 08:11:34 +0000 UTC`)
 	})
 }
